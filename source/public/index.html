@@ -6,10 +6,174 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.3/handlebars.min.js" integrity="sha256-/PJBs6QWvXijOFIX04kZpLb6ZtSQckdOIavLWKKOgXU=" crossorigin="anonymous" defer></script>
   <script src="scripts/index.js" type="module"></script>
 
+  <link rel="shortcut icon" type="image/png" href="styles/pics/pro1ico.jpg"/>
   <link rel="stylesheet" href="styles/index.css">
 </head>
 <body>
-<h1>Testing</h1>
+
+  <div class="container">
+    <div class="flexleft">
+      <div class="button tognew">Create new todo</div>
+    </div>
+    <div class="flexright">
+      <div id="togstyle" class="button">Toggle Style</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="flexleft">
+      <div id="sortname" class="button">By Name</div>
+      <div id="sortduedate" class="button">By Due Date</div>
+      <div id="sortcreationdate" class="button">By Creation Date</div>
+      <select id="sortimportance" name="importance" class="button">
+        <option value="none" class="button">Importance</option>
+        <option value="high" class="button">Highest First</option>
+        <option value="low" class="button">Lowest First</option>
+      </select>
+    </div>
+    <div class="flexright">
+      <div id="sortcompleted" class="button">Filter Completed</div>
+    </div>
+  </div>
+
+  <div id="todolist" class="todocontainer">
+
+    <div class="todoitem">
+
+      <div id="sortinginfo" hidden>
+        <div class="hiddentitle" hidden>z Test 2</div>
+        <div class="hiddendue" hidden>2024-06-15</div>
+        <div class="hiddencreated" hidden>2024-04-24</div>
+        <div class="hiddenimportance" hidden>1</div>
+      </div>
+
+      <div class="todocontainer" >
+        <p>2024-06-15</p>
+        <div>
+          <input class="checkbox" id="checkbox" type="checkbox">
+          <label class="checkboxlabel" for="checkbox">Open</label>
+        </div>
+      </div>
+
+      <div class="todocontainer" >
+        <p>z Test 2</p>
+        <p>Description</p>
+      </div>
+
+      <div class="flexright" >
+        <div class="flexright">
+          <div class="arrow"></div>
+        </div>
+        <div class="button edit">Edit</div>
+      </div>
+
+    </div>
+
+    <div class="todoitem">
+
+      <div id="sortinginfo" hidden>
+        <div class="hiddentitle" hidden>v test</div>
+        <div class="hiddendue" hidden>2024-06-30</div>
+        <div class="hiddencreated" hidden>2024-04-20</div>
+        <div class="hiddenimportance" hidden>3</div>
+      </div>
+
+      <div class="todocontainer" >
+        <p>2024-06-30</p>
+        <div>
+          <input checked class="checkbox" id="checkbox" type="checkbox">
+          <label class="checkboxlabel" for="checkbox">Closed</label>
+        </div>
+      </div>
+
+      <div class="todocontainer" >
+        <p>v test</p>
+        <p>adfaskdflakd</p>
+      </div>
+
+      <div class="flexright" >
+        <div class="flexright">
+          <div class="arrow"></div>
+          <div class="arrow"></div>
+          <div class="arrow"></div>
+        </div>
+        <div class="button edit">Edit</div>
+      </div>
+
+    </div>
+
+    <div class="todoitem">
+
+      <div id="sortinginfo" hidden>
+        <div class="hiddentitle" hidden>A random Name</div>
+        <div class="hiddendue" hidden>2024-10-15</div>
+        <div class="hiddencreated" hidden>2024-05-08</div>
+        <div class="hiddenimportance" hidden>5</div>
+      </div>
+
+      <div class="todocontainer" >
+        <p>2024-10-15</p>
+        <div>
+          <input class="checkbox" id="checkbox" type="checkbox">
+          <label class="checkboxlabel" for="checkbox">Open</label>
+        </div>
+      </div>
+
+      <div class="todocontainer" >
+        <p>A random name</p>
+        <p>ycmvbyvbybxc</p>
+      </div>
+
+      <div class="flexright" >
+        <div class="flexright">
+          <div class="arrow"></div>
+          <div class="arrow"></div>
+          <div class="arrow"></div>
+          <div class="arrow"></div>
+          <div class="arrow"></div>
+        </div>
+        <div class="button edit">Edit</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <form action="" id="todoform">
+
+    <div class="todocontainer marginstopbot">
+      <label class="formlabel" for="formtitle">Title</label>
+      <input id="formtitle" class="forminput" type="text">
+    </div>
+
+    <div class="todocontainer marginstopbot">
+      <label class="formlabel" for="formimportance">Importance</label>
+      <input id="formimportance" class="forminput" type="number">
+    </div>
+
+    <div class="todocontainer marginstopbot">
+      <label class="formlabel" for="formduedate">Due Date</label>
+      <input id="formduedate" class="forminput" type="date">
+    </div>
+
+    <div class="marginstopbot">
+      <input id="formfinished" type="checkbox">
+      <label class="formlabel" for="formfinished">Finished</label>
+    </div>
+
+    <div class="marginstopbot">
+      <label class="formlabel" for="formdescription">Description</label>
+      <textarea id="formdescription" class="forminput"></textarea>
+    </div>
+
+    <div class="flexleft">
+      <div id="create" class="button leftbutton" type="">Create</div>
+      <div class="button leftbutton tognew" type="submit">Create & Overview</div>
+      <div class="button leftbutton tognew">Overview</div>
+    </div>
+
+  </form>
+
 
 </body>
 </html>
