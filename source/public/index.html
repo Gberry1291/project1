@@ -22,9 +22,9 @@
 
   <div class="container">
     <div class="flexleft">
-      <div id="sortname" class="button">By Name</div>
-      <div id="sortduedate" class="button">By Due Date</div>
-      <div id="sortcreationdate" class="button">By Creation Date</div>
+      <div class="button sortinghat" data-sortby="hiddentitle" data-sortway="normal">By Name</div>
+      <div class="button sortinghat" data-sortby="hiddendue" data-sortway="normal">By Due Date</div>
+      <div class="button sortinghat" data-sortby="hiddencreated" data-sortway="normal">By Creation Date</div>
       <select id="sortimportance" name="importance" class="button">
         <option value="none" class="button">Importance</option>
         <option value="high" class="button">Highest First</option>
@@ -36,19 +36,19 @@
     </div>
   </div>
 
-  <div id="todolist" class="todocontainer">
+  <div id="todolist" class="vertcontainer">
 
     <div class="todoitem">
 
       <div id="sortinginfo" hidden>
         <div class="hiddentitle" hidden>z Test 2</div>
-        <div class="hiddendue" hidden>2024-06-15</div>
+        <div class="hiddendue" hidden>2024-05-25</div>
         <div class="hiddencreated" hidden>2024-04-24</div>
         <div class="hiddenimportance" hidden>1</div>
       </div>
 
       <div class="todocontainer" >
-        <p>2024-06-15</p>
+        <p>2024-05-25</p>
         <div>
           <input class="checkbox" id="checkbox" type="checkbox">
           <label class="checkboxlabel" for="checkbox">Open</label>
@@ -139,21 +139,22 @@
 
   </div>
 
-  <form action="" id="todoform">
+  <iframe name="tempIframe" style="display:none;"></iframe>
+  <form target="tempIframe" action="" id="todoform" class="vertcontainer hide">
 
     <div class="todocontainer marginstopbot">
       <label class="formlabel" for="formtitle">Title</label>
-      <input id="formtitle" class="forminput" type="text">
+      <input id="formtitle" class="forminput" type="text" required>
     </div>
 
     <div class="todocontainer marginstopbot">
       <label class="formlabel" for="formimportance">Importance</label>
-      <input id="formimportance" class="forminput" type="number">
+      <input id="formimportance" class="forminput" type="number" required min="1" max="5">
     </div>
 
     <div class="todocontainer marginstopbot">
       <label class="formlabel" for="formduedate">Due Date</label>
-      <input id="formduedate" class="forminput" type="date">
+      <input id="formduedate" class="forminput" type="date" required>
     </div>
 
     <div class="marginstopbot">
@@ -167,13 +168,13 @@
     </div>
 
     <div class="flexleft">
-      <div id="create" class="button leftbutton" type="">Create</div>
-      <div class="button leftbutton tognew" type="submit">Create & Overview</div>
+      <div id="saveedit" class="button leftbutton hide tognew">Save Changes</div>
+      <button id="create" class="button leftbutton" type="submit">Create</button>
+      <button class="button leftbutton tognew" type="submit">Create & Overview</button>
       <div class="button leftbutton tognew">Overview</div>
     </div>
-
+  
   </form>
-
 
 </body>
 </html>
