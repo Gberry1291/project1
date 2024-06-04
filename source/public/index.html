@@ -4,10 +4,49 @@
   <meta charset="UTF-8">
   <title>Note App</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.3/handlebars.min.js" integrity="sha256-/PJBs6QWvXijOFIX04kZpLb6ZtSQckdOIavLWKKOgXU=" crossorigin="anonymous" defer></script>
-  <script src="scripts/index.js" type="module"></script>
+  <script src="scripts/controllers/note-controller.js" type="module"></script>
 
   <link rel="shortcut icon" type="image/png" href="styles/pics/pro1ico.jpg"/>
   <link rel="stylesheet" href="styles/index.css">
+
+  <script id="todo-template" type="text/x-handlebars-template">
+    {{#each note}}
+    <div class="todoitem">
+
+      <div class="todocontainer" >
+        <p class="duedate">{{due}}</p>
+        <div>
+          {{#if finished}}
+          <input class="checkbox" id="checkbox" type="checkbox" checked>
+          <label class="checkboxlabel" for="checkbox">Closed</label>
+          {{else}}
+          <input class="checkbox" id="checkbox" type="checkbox">
+          <label class="checkboxlabel" for="checkbox">Open</label>
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="todocontainer" >
+        <p>{{title}}</p>
+        <p>{{description}}</p>
+      </div>
+
+      <div class="flexright" >
+        <div class="flexright">
+          {{#each importance}}
+          <div class="arrow"></div>
+          {{/each}}
+        </div>
+        <div class="button edit" data-title="{{title}}">Edit</div>
+      </div>
+
+    </div>
+    {{/each}}
+    </script>
+
+
+
+
 </head>
 <body>
 
@@ -22,13 +61,13 @@
 
   <div class="container">
     <div class="flexleft">
-      <div class="button sortinghat" data-sortby="hiddentitle" data-sortway="normal">By Name</div>
-      <div class="button sortinghat" data-sortby="hiddendue" data-sortway="normal">By Due Date</div>
-      <div class="button sortinghat" data-sortby="hiddencreated" data-sortway="normal">By Creation Date</div>
-      <select id="sortimportance" name="importance" class="button">
-        <option value="none" class="button">Importance</option>
-        <option value="high" class="button">Highest First</option>
-        <option value="low" class="button">Lowest First</option>
+      <div class="button sortinghat" data-sortby="title" data-sortway="1">By Name</div>
+      <div class="button sortinghat" data-sortby="due" data-sortway="1">By Due Date</div>
+      <div class="button sortinghat" data-sortby="created" data-sortway="1">By Creation Date</div>
+      <select data-sortby="importanceInt" id="sortimportance" name="importance" class="button">
+        <option  value="none" class="button">Importance</option>
+        <option value="0" class="button">Highest First</option>
+        <option value="1" class="button">Lowest First</option>
       </select>
     </div>
     <div class="flexright">
@@ -37,105 +76,6 @@
   </div>
 
   <div id="todolist" class="vertcontainer">
-
-    <div class="todoitem">
-
-      <div id="sortinginfo" hidden>
-        <div class="hiddentitle" hidden>z Test 2</div>
-        <div class="hiddendue" hidden>2024-05-25</div>
-        <div class="hiddencreated" hidden>2024-04-24</div>
-        <div class="hiddenimportance" hidden>1</div>
-      </div>
-
-      <div class="todocontainer" >
-        <p>2024-05-25</p>
-        <div>
-          <input class="checkbox" id="checkbox" type="checkbox">
-          <label class="checkboxlabel" for="checkbox">Open</label>
-        </div>
-      </div>
-
-      <div class="todocontainer" >
-        <p>z Test 2</p>
-        <p>Description</p>
-      </div>
-
-      <div class="flexright" >
-        <div class="flexright">
-          <div class="arrow"></div>
-        </div>
-        <div class="button edit">Edit</div>
-      </div>
-
-    </div>
-
-    <div class="todoitem">
-
-      <div id="sortinginfo" hidden>
-        <div class="hiddentitle" hidden>v test</div>
-        <div class="hiddendue" hidden>2024-06-30</div>
-        <div class="hiddencreated" hidden>2024-04-20</div>
-        <div class="hiddenimportance" hidden>3</div>
-      </div>
-
-      <div class="todocontainer" >
-        <p>2024-06-30</p>
-        <div>
-          <input checked class="checkbox" id="checkbox" type="checkbox">
-          <label class="checkboxlabel" for="checkbox">Closed</label>
-        </div>
-      </div>
-
-      <div class="todocontainer" >
-        <p>v test</p>
-        <p>adfaskdflakd</p>
-      </div>
-
-      <div class="flexright" >
-        <div class="flexright">
-          <div class="arrow"></div>
-          <div class="arrow"></div>
-          <div class="arrow"></div>
-        </div>
-        <div class="button edit">Edit</div>
-      </div>
-
-    </div>
-
-    <div class="todoitem">
-
-      <div id="sortinginfo" hidden>
-        <div class="hiddentitle" hidden>A random Name</div>
-        <div class="hiddendue" hidden>2024-10-15</div>
-        <div class="hiddencreated" hidden>2024-05-08</div>
-        <div class="hiddenimportance" hidden>5</div>
-      </div>
-
-      <div class="todocontainer" >
-        <p>2024-10-15</p>
-        <div>
-          <input class="checkbox" id="checkbox" type="checkbox">
-          <label class="checkboxlabel" for="checkbox">Open</label>
-        </div>
-      </div>
-
-      <div class="todocontainer" >
-        <p>A random name</p>
-        <p>ycmvbyvbybxc</p>
-      </div>
-
-      <div class="flexright" >
-        <div class="flexright">
-          <div class="arrow"></div>
-          <div class="arrow"></div>
-          <div class="arrow"></div>
-          <div class="arrow"></div>
-          <div class="arrow"></div>
-        </div>
-        <div class="button edit">Edit</div>
-      </div>
-
-    </div>
 
   </div>
 
