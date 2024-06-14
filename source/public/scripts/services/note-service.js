@@ -1,20 +1,33 @@
 import Note from './Note.js';
+import {noteController} from '../controllers/note-controller.js';
 
 export class NoteService {
     constructor(){
         this.notes=[]
     }
 
-    loadData() {
-        if (this.notes.length === 0) { // initial data seed
-            this.notes.push(new Note("a test","2024-06-07","2024-05-30", [1,1,1],"some new descrip",true,3));
-            this.notes.push(new Note("c test","2024-08-15","2024-05-3", [1,1,1,1,1],"blalskd",true,5));
-            this.notes.push(new Note("z test","2025-05-30","2024-05-10", [1],"ggggg",false,1));
+    loadData = async () =>{
+        if (this.notes.length===0) {
+            const myHeaders = new Headers();
+            myHeaders.append('Content-Type', 'application/json');
+            const myInit = {
+            method: 'POST',
+            headers: myHeaders,
+            cache: 'default',
+            };
+            const myRequest = new Request('/loadnote', myInit);
+            const response = await fetch(myRequest);
+            const movies = await response.json();
+            movies.forEach(element => {
+                this.newNote(element["title"],element["due"],element["created"],element["importance"],element["description"],element["finished"],element["importanceInt"],element["_id"])
+            });
+            noteController.showNotes()
         }
     }
 
-    newNote(title,due,created,importance,description,finished){
-        this.notes.push(new Note(title,due,created,importance,description,finished));
+
+    newNote(title,due,created,importance,description,finished,importanceInt,id){
+        this.notes.push(new Note(title,due,created,importance,description,finished,importanceInt,id));
     }
 
 
