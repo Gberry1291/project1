@@ -3,6 +3,9 @@
       <div class="button tognew">Create new todo</div>
     </div>
     <div class="flexright">
+      <form class="formbox" action='/logout' method='post'>
+        <button class="button">LogOut</button>
+      </form>
       <div id="togstyle" class="button">Toggle Style</div>
     </div>
   </div>
@@ -58,9 +61,38 @@
 
     <div class="flexleft">
       <div id="saveedit" class="button leftbutton hide tognew">Save Changes</div>
+      <div id="deleteedit" class="button leftbutton hide tognew">Delete Note</div>
       <button id="create" class="button leftbutton" type="submit">Create</button>
       <button id="createoverview" class="button leftbutton tognew" type="submit">Create & Overview</button>
       <div class="button leftbutton tognew">Overview</div>
     </div>
   
   </form>
+
+<div id="customalert">
+  <div id="alerthouse" class="">
+    <div id="alertmark" class=""></div>
+    <p id="alerttext">Todo Created Succesfully</p>
+  </div>
+</div>
+
+{{#unless loggedin}}
+  <div id="loggedin" hidden>false</div>
+  <div id="logcover" class="cover">
+    <div class="insidecover vertcontainer">
+      <p class="coverp">You have to be logged in to use this app</p>
+      <p class="coverp">Sign-in Or Register Below</p>
+      <form class="logform" id="loginform" action='/login' method='post'>
+        <input placeholder="backref" type="hidden" name="_backref" value="{{backref}}">
+        <input id="usernameinput" class="forminput" placeholder="name" type="text" name="name" required>
+        <input id="passwordinput" class="forminput" placeholder="password" type="password" name="pwd" required>
+        <input id="loginsub" class="forminput" type="submit" value="Login oder registrieren">
+        <button id="logindemouser" class="forminput button" id="demouserbutton">Continue as DemoUser</button>
+      </form>
+    </div>
+  </div>
+   <script src="scripts/controllers/login-controller.js" type="module"></script>
+{{/unless}}
+{{#if loggedin}}
+  <div id="loggedin" hidden>true</div>
+{{/if}}

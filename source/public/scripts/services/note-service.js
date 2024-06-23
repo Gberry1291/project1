@@ -1,5 +1,5 @@
 import Note from './Note.js';
-import {noteController} from '../controllers/note-controller.js';
+import {showNotes,noteController} from '../controllers/note-controller.js';
 
 export class NoteService {
     constructor(){
@@ -21,7 +21,8 @@ export class NoteService {
             movies.forEach(element => {
                 this.newNote(element["title"],element["due"],element["created"],element["importance"],element["description"],element["finished"],element["importanceInt"],element["_id"])
             });
-            noteController.showNotes()
+            showNotes()
+            noteController.initEventHandlers();
         }
     }
 

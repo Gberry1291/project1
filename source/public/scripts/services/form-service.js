@@ -1,4 +1,6 @@
 import {noteService} from './note-service.js';
+import { customAlert } from './click-events.js';
+import { showNotes } from '../controllers/note-controller.js';
 
 
 export async function CreateNewTodo(){
@@ -32,10 +34,13 @@ export async function CreateNewTodo(){
         body: JSON.stringify(thebody)
         };
         const myRequest = new Request('/newnote', myInit);
-        fetch(myRequest);
-        noteService.newNote(formtitle.value,formduedate.value,formcreated,importancelist,formdescription,formfinished,formimportance.value)
+        const response = await fetch(myRequest);
+        const movies = await response.json();
+        customAlert("passed","Todo added Succesfully")
+        noteService.newNote(movies.title,movies.due,movies.created,movies.importance,movies.description,movies.finished,movies.importanceInt,movies["_id"])
+        document.getElementById("todoform").reset();
+        showNotes()
     }
-
 
 }
 
@@ -97,6 +102,31 @@ export function saveEdit(){
     };
     const myRequest = new Request('/editnote', myInit);
     fetch(myRequest);
+    showNotes()
+}
 
+export function deleteEdit(){
+    const formid=document.getElementById("id").value
+
+    for (let i = 0; i < noteService.notes.length; i++) {
+        if (noteService.notes[i].id===formid) {
+            noteService.notes.splice(i, 1)
+        }
+        
+    }
+
+    const thebody={id:formid}
+
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    const myInit = {
+    method: 'POST',
+    headers: myHeaders,
+    cache: 'default',
+    body: JSON.stringify(thebody)
+    };
+    const myRequest = new Request('/deletenote', myInit);
+    fetch(myRequest);
+    showNotes()
 }
 

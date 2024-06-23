@@ -15,7 +15,6 @@ export function sortItBy(index,highlow) {
         }
         return -1
     });
-
 }
 
 export function FilterCompleted(){
