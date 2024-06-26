@@ -59,3 +59,13 @@ export function customAlert(status,text){
     
     }, {once : true});
 }
+
+export function FilterCompleted(){
+    const checkboxes=document.querySelectorAll(".checkbox")
+    document.getElementById("sortcompleted").classList.toggle("filtering")
+    checkboxes.forEach(box => {
+        if(!box.checked){
+            box.closest(".todoitem").classList.toggle("hide")
+        }
+    });
+}

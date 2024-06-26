@@ -13,13 +13,23 @@ export class OrderStore {
         return this.db.find({user:name});
     }
 
-    add (note,username) {
-        Object.defineProperty(note, "user", {value:username})
-        return this.db.insert(note);
+    async findOne(id) {
+        return this.db.find({_id:id.id})
+    }
+
+    async add (note,username) {
+        const newnote=note
+        newnote.user=username
+        this.db.insert(newnote);
+        return this.db.find({user:username});
     }
 
     deleteNote (noteid) {
         this.db.remove({ _id: noteid.id });
+    }
+
+    sort(name,sortmethod){
+        return this.db.find({user:name}).sort(sortmethod);
     }
 }
 

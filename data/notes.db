@@ -1,15 +1,4 @@
-{"title":"newer title","due":"2024-06-27","created":"2024-06-22","importance":[1,1,1],"description":"","finished":false,"importanceInt":"3","user":"demouser","_id":"1tpQrbPKjDb6o2sQ"}
+{"title":"A new demo title","due":"2024-06-28","created":"2024-06-23","importance":[1,1,1,1,1],"description":"This is the description of your task.","finished":true,"importanceInt":"5","user":"demouser","_id":"40mNHn3POdb7Nktu"}
 {"title":"a test Gary","due":"2024-06-21","created":"2024-06-20","importance":[1],"description":"","finished":true,"importanceInt":"1","user":"gary","_id":"G87vJhjxk5SpQC2v"}
-{"title":"ultimate test","due":"2024-06-29","created":"2024-06-20","importance":[1,1,1,1,1],"description":"","finished":false,"importanceInt":"5","user":"demouser","_id":"aTuxm88WSydbqFHI"}
-{"title":"z test 2","due":"2025-05-30","created":"2024-05-10","importance":[1],"description":"fffff","finished":false,"importanceInt":"1","user":"demouser","_id":"hUNfphhtbPmY7p1E"}
-{"title":"dark test","due":"2024-06-26","created":"2024-06-22","importance":[1,1],"description":"","finished":false,"importanceInt":"2","user":"demouser","_id":"mWZe2KELQwS08X1S"}
-{"title":"j","due":"2024-06-26","created":"2024-06-22","importance":[1,1],"description":"","finished":false,"importanceInt":"2","user":"demouser","_id":"mWZe2KELQwS08X1S"}
-{"title":"","due":"2024-06-26","created":"2024-06-22","importance":[1,1],"description":"","finished":false,"importanceInt":"2","user":"demouser","_id":"mWZe2KELQwS08X1S"}
-{"title":"","due":"2024-06-26","created":"2024-06-22","importance":[1,1],"description":"","finished":true,"importanceInt":"2","user":"demouser","_id":"mWZe2KELQwS08X1S"}
-{"$$deleted":true,"_id":"mWZe2KELQwS08X1S"}
-{"$$deleted":true,"_id":"hUNfphhtbPmY7p1E"}
-{"$$deleted":true,"_id":"aTuxm88WSydbqFHI"}
-{"$$deleted":true,"_id":"1tpQrbPKjDb6o2sQ"}
-{"title":"A demo Title","due":"2024-06-28","created":"2024-06-23","importance":[1,1,1,1,1],"description":"This is the description of your task.","finished":true,"importanceInt":"5","user":"demouser","_id":"40mNHn3POdb7Nktu"}
-{"title":"Create a New todo!","due":"2024-06-27","created":"2024-06-23","importance":[1],"description":"Click the button on the top left to created a new item in the to-do list.","finished":false,"importanceInt":"1","user":"demouser","_id":"ZW36lXiG0zi8gUha"}
 {"title":"You can also sort notes","due":"2024-06-27","created":"2024-06-23","importance":[1,1,1],"description":"by importance, name or by whichever is due soonest.","finished":false,"importanceInt":"3","user":"demouser","_id":"GglNK1sel5hzgiwR"}
+{"title":"Create a New todo!","due":"2024-07-04","created":"2024-06-23","importance":[1],"description":"Click the button on the top left to created a new item in the to-do list.","finished":false,"importanceInt":"1","user":"demouser","_id":"ZW36lXiG0zi8gUha"}
