@@ -2,6 +2,10 @@ import {orderStore} from '../services/orderstore.js';
 import {userStore} from '../services/userstore.js';
 import {SecurityUtil} from "../utils/security.js";
 
+/* eslint class-methods-use-this: ["error", { "exceptMethods": [
+showIndex,login,logout,createNote,loadNote,editNote,deleteNote,sortNote,findNote
+] }] */
+
 export class NoteController {
 
     showIndex(req, res){
@@ -12,12 +16,11 @@ export class NoteController {
         }
     };
 
-    login = async (req, res) => {
+    async login(req, res){
         if (!SecurityUtil.isLoggedIn(req)) {
             const username = req.body.username.toLowerCase();
-            const password = req.body.password;
 
-            let valid = await userStore.authenticate(username, password);
+            const valid = await userStore.authenticate(username, req.body.password);
 
             if (valid) {
                 SecurityUtil.login(req, username);
@@ -29,26 +32,38 @@ export class NoteController {
             res.redirect("/");
         }
     };
-    logout = (req, res) => {
+
+    logout(req, res){
         if (SecurityUtil.isLoggedIn(req)) {
             SecurityUtil.logout(req);
             res.redirect("/");
         }
     };
 
-    createNote = async (req, res)=>{
+    async createNote(req, res){
         res.json(await orderStore.add(req.body,req.session.user.name))
     };
-    loadNote = async (req, res) => {
+
+    async loadNote(req, res){
         res.json(await orderStore.all(req.session.user.name))
     };
-    editNote = (req, res) => {
-        orderStore.edit(req.body)
-        res.end()
+
+    async editNote(req, res){
+        await orderStore.edit(req.body,req.session.user.name)
+        res.json(await orderStore.all(req.session.user.name))
     };
-    deleteNote = (req, res) => {
-        orderStore.deleteNote(req.body)
-        res.end()
+
+    async deleteNote(req, res){
+        await orderStore.deleteNote(req.body)
+        res.json(await orderStore.all(req.session.user.name))
+    };
+
+    async sortNote(req, res){
+        res.json(await orderStore.sort(req.session.user.name,req.body))
+    };
+
+    async findNote(req, res){
+        res.json(await orderStore.findOne(req.body))
     };
 
 }
