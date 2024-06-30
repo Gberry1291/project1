@@ -1,24 +1,15 @@
 import { noteController } from './note-controller.js';
-import {customAlert} from '../services/click-events.js';
+import {customAlert} from './click-event-controller.js';
+import LoginService from '../services/login-service.js';
 
 async function login(){
 
     const username=document.getElementById("usernameinput").value
     const password=document.getElementById("passwordinput").value
-    const thebody={username,password}
+    const userinfo={username,password}
 
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-    const myInit = {
-    method: 'POST',
-    headers: myHeaders,
-    cache: 'default',
-    body: JSON.stringify(thebody)
-    };
-    const myRequest = new Request('/login', myInit);
-    const response = await fetch(myRequest);
-    const movies = await response.json();
-    if (movies.logged==="true") {
+    const success = await LoginService.loginUser(userinfo)
+    if (success.logged==="true") {
         document.getElementById("loggedin").innerHTML="true"
         noteController.initialize()
         document.getElementById("logcover").style.display="none"

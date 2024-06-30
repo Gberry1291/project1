@@ -12,10 +12,10 @@
 
   <div class="container">
     <div class="flexleft">
-      <div id="sorttitle" class="button" data-sortby="title" data-sortway="1">By Name</div>
-      <div id="sortdue" class="button" data-sortby="due" data-sortway="1">By Due Date</div>
-      <div id="sortcreated" class="button" data-sortby="created" data-sortway="1">By Creation Date</div>
-      <select data-sortby="importanceInt" id="sortimportance" name="importance" class="button">
+      <div id="sorttitle" class="button">By Name</div>
+      <div id="sortdue" class="button">By Due Date</div>
+      <div id="sortcreated" class="button">By Creation Date</div>
+      <select id="sortimportance" name="importance" class="button">
         <option  value="none" class="button">Importance</option>
         <option value="0" class="button">Highest First</option>
         <option value="1" class="button">Lowest First</option>
@@ -60,7 +60,7 @@
     </div>
 
     <div class="flexleft">
-      <div id="saveedit" class="button leftbutton hide tognew">Save Changes</div>
+      <div id="saveedit" class="button leftbutton hide">Save Changes</div>
       <div id="deleteedit" class="button leftbutton hide tognew">Delete Note</div>
       <button id="create" class="button leftbutton" type="submit">Create</button>
       <button id="createoverview" class="button leftbutton tognew" type="submit">Create & Overview</button>
