@@ -1,4 +1,5 @@
-import {toggleFormMode,ToggleEditMode,ToggleOpenClosed,lightDarkMode,arrowDarkMode,customAlert,FilterCompleted} from '../services/click-events.js'
+import {toggleFormMode,ToggleEditMode,ToggleOpenClosed,lightDarkMode,arrowDarkMode,customAlert,FilterCompleted} from './click-event-controller.js'
+import NoteService from '../services/note-service.js'
 
 let darkmode=false
 function ChangeDate(){
@@ -20,29 +21,19 @@ function ChangeDate(){
 }
 async function fillEditForm(){
     const theid = {"id":this.getAttribute("data-id")}
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-    const myInit = {
-    method: 'POST',
-    headers: myHeaders,
-    cache: 'default',
-    body: JSON.stringify(theid)
-    };
-    const myRequest = new Request('/findone', myInit);
-    const response = await fetch(myRequest);
-    const movies = await response.json();
+    const NoteFound=await NoteService.findNote(theid)
 
     // eslint-disable-next-line no-underscore-dangle
-    document.getElementById("id").value=movies[0]._id
-    document.getElementById("formtitle").value=movies[0].title
-    document.getElementById("formimportance").value=movies[0].importance.length
-    document.getElementById("formduedate").value=movies[0].due
-    if(movies[0].finished){
+    document.getElementById("id").value=NoteFound[0]._id
+    document.getElementById("formtitle").value=NoteFound[0].title
+    document.getElementById("formimportance").value=NoteFound[0].importance.length
+    document.getElementById("formduedate").value=NoteFound[0].due
+    if(NoteFound[0].finished){
         document.getElementById("formfinished").checked=true
     }else{
         document.getElementById("formfinished").checked=false;
     }
-    document.getElementById("formdescription").value=movies[0].description
+    document.getElementById("formdescription").value=NoteFound[0].description
 
 }
 function notesEventHandlers(){
@@ -58,26 +49,13 @@ function notesEventHandlers(){
     
     }
 }
-async function MakeRequest(path,body,callback){
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-    const myInit = {
-    method: 'POST',
-    headers: myHeaders,
-    cache: 'default',
-    body: JSON.stringify(body)
-    };
-    const myRequest = new Request(path, myInit);
-    const response = await fetch(myRequest);
-    const movies = await response.json();
-    callback(movies)
-}
 const HBscript='{{#each note}}<div class="todoitem"><div class="todocontainer" ><p class="duedate">{{due}}</p><div>{{#if finished}}<input class="checkbox" name="checkbox" type="checkbox" checked><span class="checkboxlabel">Closed</span>{{else}}<input class="checkbox" name="checkbox" type="checkbox"><span class="checkboxlabel">Open</span>{{/if}}</div></div><div class="todocontainer" ><p>{{title}}</p><p>{{description}}</p></div><div class="flexright" ><div class="flexright">{{#each importance}}<div class="arrow"></div>{{/each}}</div><div class="button edit" data-id="{{_id}}">Edit</div></div></div>{{/each}}'
 /* global Handlebars */
 const todoTemplateCompiled=Handlebars.compile(HBscript);
-export function showNotes(NoteList) {
+
+export function showNotes(notelist) {
     document.getElementById("todolist").innerHTML = todoTemplateCompiled(
-        {note: NoteList,darkmode},
+        {note: notelist,darkmode},
         {allowProtoPropertiesByDefault: true}
     )
     if (darkmode) {
@@ -86,17 +64,34 @@ export function showNotes(NoteList) {
     notesEventHandlers()
     ChangeDate()
 }
-function CreateNewTodo(){
+async function sortitby(sortHowDic){
+    showNotes(await NoteService.SortedNote(sortHowDic))
+}
+function grabFormData(){
     const formtitle=document.getElementById("formtitle")
     const formimportance=document.getElementById("formimportance")
     const formduedate=document.getElementById("formduedate")
     const formfinished=document.getElementById("formfinished").checked
     const formdescription=document.getElementById("formdescription").value
+    const formid=document.getElementById("id").value
     const formcreated=new Date().toISOString().slice(0, 10)
     const importancelist=[]
     for (let i = 0; i < formimportance.value; i++) {
         importancelist.push(1)   
     }
+    const thebody={title:formtitle.value,due:formduedate.value,created:formcreated,importance:importancelist,description:formdescription,finished:formfinished,importanceInt:formimportance.value,id:formid}
+    return(thebody) 
+}
+async function CreateNewTodo(){
+    const thebody=grabFormData()
+    document.getElementById("todoform").reset();
+    customAlert("passed","Todo added Succesfully")
+    showNotes(await NoteService.createNewNote(thebody))
+}
+function ValidateForm(){
+    const formtitle=document.getElementById("formtitle")
+    const formimportance=document.getElementById("formimportance")
+    const formduedate=document.getElementById("formduedate")
     let formcheck=true
     const checklist=[formtitle,formimportance,formduedate]
     checklist.forEach(element => {
@@ -106,29 +101,22 @@ function CreateNewTodo(){
         }
     });
     if (formcheck===true) {
-        const thebody={title:formtitle.value,due:formduedate.value,created:formcreated,importance:importancelist,description:formdescription,finished:formfinished,importanceInt:formimportance.value}
-
-        customAlert("passed","Todo added Succesfully")
-        document.getElementById("todoform").reset();
-        MakeRequest("/newnote",thebody,showNotes)
+        return true
     }
-
+    return false
 }
-function saveEdit(){
+async function saveEdit(){
+    const thebody=grabFormData()
+    showNotes(await NoteService.editNote(thebody))
+}
+async function DeleteNote(){
     const formid=document.getElementById("id").value
-    const formtitle=document.getElementById("formtitle").value
-    const formimportance=document.getElementById("formimportance").value
-    const formduedate=document.getElementById("formduedate").value
-    const formfinished=document.getElementById("formfinished").checked
-    const formdescription=document.getElementById("formdescription").value
-
-    const newimportance=[]
-    for (let j = 0; j < Number(formimportance); j++) {
-        newimportance.push(1)
-    }
-    const thebody={id:formid,title:formtitle,due:formduedate,importance:newimportance,description:formdescription,finished:formfinished,importanceInt:formimportance}
-    return thebody
+    const thebody={id:formid}
+    showNotes(await NoteService.deleteNote(thebody))
+    ToggleEditMode()
+    document.getElementById("todoform").reset();
 }
+
 export class NoteController {
     constructor() {
         this.tognew=document.querySelectorAll(".tognew")
@@ -136,22 +124,23 @@ export class NoteController {
         this.sorttitle=document.getElementById("sorttitle")
         this.sortdue=document.getElementById("sortdue")
         this.sortcreated=document.getElementById("sortcreated")
+        this.sortimportance=document.getElementById("sortimportance")
     }
 
     initEventHandlers() {
         this.sorttitle.addEventListener("click",()=>{
-            MakeRequest('/sortnote',{"title":1},showNotes)
+            sortitby({"title":1})
         })
         this.sortdue.addEventListener("click",()=>{
-            MakeRequest('/sortnote',{"due":1},showNotes)
+            sortitby({"due":1})
         })
         this.sortcreated.addEventListener("click",()=>{
-            MakeRequest('/sortnote',{"created":1},showNotes)
+            sortitby({"created":1})
         })
-        document.getElementById("sortimportance").addEventListener("change",()=>{
+        this.sortimportance.addEventListener("change",()=>{
             const SortImportance=document.getElementById("sortimportance")
             const HighLow=Number(SortImportance.value)
-            MakeRequest('/sortnote',{"importanceInt":HighLow},showNotes)
+            sortitby({"importanceInt":HighLow})
         })
         document.getElementById("sortcompleted").addEventListener("click",FilterCompleted)
         
@@ -159,20 +148,19 @@ export class NoteController {
             element.addEventListener("click",toggleFormMode)
         });        
         
-        document.getElementById("saveedit").addEventListener("click",()=>{
-            const thebody=saveEdit()
-            MakeRequest('/editnote',thebody,showNotes)
-            ToggleEditMode()
+        document.getElementById("saveedit").addEventListener("click",(event)=>{
+            if (ValidateForm()) {
+                saveEdit()
+                ToggleEditMode()
+                toggleFormMode()
+            }
+            event.preventDefault()
         })
-        document.getElementById("deleteedit").addEventListener("click",()=>{
-            const formid=document.getElementById("id").value
-            const thebody={id:formid}
-            MakeRequest('/deletenote',thebody,showNotes)
-            ToggleEditMode()
-            document.getElementById("todoform").reset();
-        })
+        document.getElementById("deleteedit").addEventListener("click",DeleteNote)
         document.getElementById("create").addEventListener("click",(event)=>{
-            CreateNewTodo()
+            if (ValidateForm()) {
+                CreateNewTodo()
+            }
             event.preventDefault()
         });
         document.getElementById("createoverview").addEventListener("click",(event)=>{
@@ -187,9 +175,11 @@ export class NoteController {
         })
     }
 
-    initialize () {
+    async initialize () {
         if (this.loggedin.innerHTML==="true") {
-            MakeRequest("/loadnote",{"pass":"blank"},showNotes)
+            // showNotes(await noteService.loadNoteList())
+            showNotes(await NoteService.loadNoteList())
+            
             this.initEventHandlers();
         }
     }

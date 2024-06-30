@@ -2,13 +2,9 @@ import {orderStore} from '../services/orderstore.js';
 import {userStore} from '../services/userstore.js';
 import {SecurityUtil} from "../utils/security.js";
 
-/* eslint class-methods-use-this: ["error", { "exceptMethods": [
-showIndex,login,logout,createNote,loadNote,editNote,deleteNote,sortNote,findNote
-] }] */
+export default class NoteController {
 
-export class NoteController {
-
-    showIndex(req, res){
+    static showIndex(req, res){
         if (SecurityUtil.isLoggedIn(req)) {
             res.render("index",{"loggedin":true})
         }else{
@@ -16,7 +12,7 @@ export class NoteController {
         }
     };
 
-    async login(req, res){
+    static async login(req, res){
         if (!SecurityUtil.isLoggedIn(req)) {
             const username = req.body.username.toLowerCase();
 
@@ -33,39 +29,37 @@ export class NoteController {
         }
     };
 
-    logout(req, res){
+    static logout(req, res){
         if (SecurityUtil.isLoggedIn(req)) {
             SecurityUtil.logout(req);
             res.redirect("/");
         }
     };
 
-    async createNote(req, res){
+    static async createNote(req, res){
         res.json(await orderStore.add(req.body,req.session.user.name))
     };
 
-    async loadNote(req, res){
+    static async loadNote(req, res){
         res.json(await orderStore.all(req.session.user.name))
     };
 
-    async editNote(req, res){
+    static async editNote(req, res){
         await orderStore.edit(req.body,req.session.user.name)
         res.json(await orderStore.all(req.session.user.name))
     };
 
-    async deleteNote(req, res){
+    static async deleteNote(req, res){
         await orderStore.deleteNote(req.body)
         res.json(await orderStore.all(req.session.user.name))
     };
 
-    async sortNote(req, res){
+    static async sortNote(req, res){
         res.json(await orderStore.sort(req.session.user.name,req.body))
     };
 
-    async findNote(req, res){
+    static async findNote(req, res){
         res.json(await orderStore.findOne(req.body))
     };
 
 }
-
-export const noteController = new NoteController();
