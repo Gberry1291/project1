@@ -1,16 +1,17 @@
+import NoteService from '../services/note-service.js'
+
 export function lightDarkMode(){
     document.body.classList.toggle("darkmode");
-}
-export function arrowDarkMode(){
     const arrows=document.querySelectorAll(".arrow")
     arrows.forEach(arrow => {
-        arrow.classList.toggle("lightmode")
+        arrow.classList.toggle("darkmode")
     });
     const todoitems=document.querySelectorAll(".todoitem")
     todoitems.forEach(item => {
-        item.classList.toggle("darkmodeborder")
+        item.classList.toggle("darkmode")
     });
 }
+
 export function toggleFormMode(){
     const container = document.querySelectorAll(".container")
     container.forEach(element => {
@@ -20,19 +21,21 @@ export function toggleFormMode(){
     document.getElementById("todolist").classList.toggle("hide")
     document.getElementById("todoform").classList.toggle("hide")
 }
-export function ToggleEditMode(){
+export function toggleEditMode(){
     const editbutts=document.querySelectorAll(".leftbutton")
     editbutts.forEach(butt => {
         butt.classList.toggle("hide")
     });
 }
 
-export function ToggleOpenClosed(){
+export function toggleOpenClosed(){
     if (this.checked) {
         this.nextElementSibling.innerHTML = "Closed"
     }else{
         this.nextElementSibling.innerHTML = "Open"
     }
+    const thebody={"id":this.getAttribute("data-id"),"finished":this.checked}
+    NoteService.editChecked(thebody)
 }
 
 export function customAlert(status,text){
@@ -60,12 +63,19 @@ export function customAlert(status,text){
     }, {once : true});
 }
 
-export function FilterCompleted(){
+export function filterCompleted(){
     const checkboxes=document.querySelectorAll(".checkbox")
-    document.getElementById("sortcompleted").classList.toggle("filtering")
     checkboxes.forEach(box => {
         if(!box.checked){
             box.closest(".todoitem").classList.toggle("hide")
         }
     });
+}
+export function highLightButton(id){
+    const butts=document.querySelectorAll(".sorter")
+    butts.forEach(element => {
+        element.classList.remove("buttonselect");
+    });
+    document.getElementById("sortimportanceInt").classList.remove("buttonselect")
+    document.getElementById(`sort${id}`).classList.toggle("buttonselect");
 }

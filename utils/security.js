@@ -1,4 +1,4 @@
-export class SecurityUtil {
+export default class SecurityUtil {
     static isLoggedIn(req) {
         return !!req.session.user;
     }
@@ -7,8 +7,8 @@ export class SecurityUtil {
         req.session.user = null;
     }
 
-    static login(req, name) {
-        req.session.user = {name, isAdmin: false};
+    static login(req, name,sortway,highlow,darkmode,filter) {
+        req.session.user = {name, isAdmin: false,sortway,highlow,darkmode,filter};
     }
 
     static handleAuthenticate(req, res, next) {

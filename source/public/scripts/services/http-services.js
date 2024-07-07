@@ -1,4 +1,4 @@
-export default async function MakeRequest(path,body){
+export default async function makeRequest(path,body){
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     const myInit = {

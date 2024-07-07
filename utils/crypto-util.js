@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 
-export class CryptoUtil {
+export default class CryptoUtil {
     static hashPwd(pwd) {
-        return crypto.createHmac('sha256', "secret!") //more information: https://nodejs.org/api/crypto.html
+        return crypto.createHmac('sha256', "secret!")
             .update(pwd)
             .digest('hex');
     }

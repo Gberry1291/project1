@@ -1,2 +1,3 @@
-{"username":"demouser","passwordHash":"1bb42aeb05321f73eb1978ac6bb90e70a1eb4b0f312feb1e0fa865ffdc6b1253","_id":"3WTQMNqjfLy0FJcQ"}
-{"username":"gary","passwordHash":"47d48db40926d8b14d6733b32a33ad1e2426d11fe1fc0ced5010f3bd5cca3272","_id":"SIPnxSufJTGgVBOU"}
+{"username":"demouser","passwordHash":"1bb42aeb05321f73eb1978ac6bb90e70a1eb4b0f312feb1e0fa865ffdc6b1253","sortway":"title","sorthighlow":"1","darkmode":false,"filter":false,"_id":"3WTQMNqjfLy0FJcQ"}
+{"username":"gary2","passwordHash":"613824b79e11b6db3dc84bf8558ee9f2a8551036bdae9198c9893f25ada38198","darkmode":true,"sortway":"title","sorthighlow":1,"_id":"Bv8e0GDlfUJAzuAE"}
+{"username":"gary","passwordHash":"47d48db40926d8b14d6733b32a33ad1e2426d11fe1fc0ced5010f3bd5cca3272","sortway":"title","sorthighlow":1,"darkmode":true,"_id":"SIPnxSufJTGgVBOU"}
