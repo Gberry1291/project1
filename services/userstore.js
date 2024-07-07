@@ -1,6 +1,6 @@
 import Datastore from 'nedb-promises'
-import {CryptoUtil} from '../utils/crypto-util.js';
-import {User} from './user.js'
+import CryptoUtil from '../utils/crypto-util.js';
+import User from './user.js'
 
 export class UserStore {
     constructor(db) {
@@ -19,13 +19,21 @@ export class UserStore {
         if (!(username && password)) {
             return false;
         }
-        const user = await this.db.findOne({username: username});
+        const user = await this.db.findOne({username});
         if (user == null) {
             await this.register(username, password);
             return true;
         }
-        return user.passwordHash === CryptoUtil.hashPwd(password)
+        if(user.passwordHash === CryptoUtil.hashPwd(password)){
+            return user
+        }
+        return false
+        
 
+    }
+
+    changeuserinfo(user,whattochangedic){
+            this.db.update({"username":user}, { $set: whattochangedic });
     }
 }
 

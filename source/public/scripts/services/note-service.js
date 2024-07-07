@@ -1,27 +1,40 @@
-import MakeRequest from "./http-services.js";
+import makeRequest from "./http-services.js";
 
 export default class NoteService {
-    static async loadNoteList() {
-        return MakeRequest("/loadnote",{"pass":"blank"})
+    static loadNoteList() {
+        return makeRequest("/loadnote",{"pass":"blank"})
     }
 
-    static async SortedNote(HowToSort) {
-        return MakeRequest('/sortnote',HowToSort)
+    static sortedNote(HowToSort) {
+        return makeRequest('/sortnote',HowToSort)
     }
 
-    static async createNewNote(thebody) {
-        return MakeRequest("/newnote",thebody)
+    static createNewNote(thebody) {
+        return makeRequest("/newnote",thebody)
     }
 
-    static async editNote(thebody) {
-        return MakeRequest('/editnote',thebody)
+    static editNote(thebody) {
+        return makeRequest('/editnote',thebody)
     }
 
-    static async deleteNote(thebody) {
-        return MakeRequest('/deletenote',thebody)
+    static editChecked(thebody) {
+        return makeRequest('/editchecked',thebody)
     }
 
-    static async findNote(thebody) {
-        return MakeRequest('/findone',thebody)
+    static deleteNote(thebody) {
+        return makeRequest('/deletenote',thebody)
     }
+
+    static findNote(thebody) {
+        return makeRequest('/findone',thebody)
+    }
+
+    static darkMode(thebody) {
+        return makeRequest('/changedark',thebody)
+    }
+
+    static filterCom(thebody) {
+        makeRequest('/filter',thebody)
+    }
+
 }

@@ -12,11 +12,11 @@
 
   <div class="container">
     <div class="flexleft">
-      <div id="sorttitle" class="button">By Name</div>
-      <div id="sortdue" class="button">By Due Date</div>
-      <div id="sortcreated" class="button">By Creation Date</div>
-      <select id="sortimportance" name="importance" class="button">
-        <option  value="none" class="button">Importance</option>
+      <div data-sortway="title" data-highlow="1" id="sorttitle" class="button sorter">By Name</div>
+      <div data-sortway="due" data-highlow="1" id="sortdue" class="button sorter">By Due Date</div>
+      <div data-sortway="created" data-highlow="1" id="sortcreated" class="button sorter">By Creation Date</div>
+      <select data-sortway="importanceInt" id="sortimportanceInt" class="button">
+        <option value="none" class="button">Importance</option>
         <option value="0" class="button">Highest First</option>
         <option value="1" class="button">Lowest First</option>
       </select>
@@ -34,17 +34,17 @@
 
     <input id="id" type="text" hidden>
 
-    <div class="todocontainer marginstopbot">
+    <div class="marginstopbot">
       <label class="formlabel" for="formtitle">Title</label>
       <input id="formtitle" class="forminput" type="text" required>
     </div>
 
-    <div class="todocontainer marginstopbot">
+    <div class="marginstopbot">
       <label class="formlabel" for="formimportance">Importance</label>
       <input id="formimportance" class="forminput" type="number" required min="1" max="5">
     </div>
 
-    <div class="todocontainer marginstopbot">
+    <div class="marginstopbot">
       <label class="formlabel" for="formduedate">Due Date</label>
       <input id="formduedate" class="forminput" type="date" required>
     </div>
@@ -60,8 +60,8 @@
     </div>
 
     <div class="flexleft">
-      <div id="saveedit" class="button leftbutton hide">Save Changes</div>
-      <div id="deleteedit" class="button leftbutton hide tognew">Delete Note</div>
+      <button id="saveedit" class="button leftbutton hide">Save Changes</button>
+      <button id="deleteedit" class="button leftbutton hide tognew">Delete Note</button>
       <button id="create" class="button leftbutton" type="submit">Create</button>
       <button id="createoverview" class="button leftbutton tognew" type="submit">Create & Overview</button>
       <div class="button leftbutton tognew">Overview</div>

@@ -4,8 +4,8 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import session from 'express-session';
 import noteRoutes from './routes/note-routes.js';
-import {helpers} from './utils/handlebar-util.js'
-import {overrideMiddleware} from "./utils/method-override.js";
+import helpers from './utils/handlebar-util.js'
+import overrideMiddleware from "./utils/method-override.js";
 
 const app = express();
 

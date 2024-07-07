@@ -1,8 +1,24 @@
-import {toggleFormMode,ToggleEditMode,ToggleOpenClosed,lightDarkMode,arrowDarkMode,customAlert,FilterCompleted} from './click-event-controller.js'
+import {
+    toggleFormMode,
+    toggleEditMode,
+    toggleOpenClosed,
+    lightDarkMode,
+    filterCompleted,
+    highLightButton,
+    customAlert
+} from './click-event-controller.js'
+import {
+    createNewTodo,
+    validateForm,
+    saveEdit,
+    deleteNote,
+    fillEditForm
+} from './form-controller.js'
 import NoteService from '../services/note-service.js'
 
 let darkmode=false
-function ChangeDate(){
+let filter=false
+function changeDate(){
 
     const days=document.querySelectorAll(".duedate")
     const sevenDays=604800000
@@ -13,177 +29,136 @@ function ChangeDate(){
         const domElement=element
         const newdate= new Date(element.innerHTML)
         const daysUntilDue=newdate.getTime()-today.getTime()
-        if(daysUntilDue<=sevenDays){
+        if((daysUntilDue<=sevenDays)&&(daysUntilDue>0)){
             domElement.innerHTML=dayNames[newdate.getDay()]
         }
+        if ( (daysUntilDue<0) && (!domElement.nextSibling.firstChild.checked)  ) {
+            domElement.classList.add("duedatelate")
+            domElement.innerHTML+=" LATE"
+            customAlert("failed","a Todo is past its due date AND not completed!")
+        }
     });
-
-}
-async function fillEditForm(){
-    const theid = {"id":this.getAttribute("data-id")}
-    const NoteFound=await NoteService.findNote(theid)
-
-    // eslint-disable-next-line no-underscore-dangle
-    document.getElementById("id").value=NoteFound[0]._id
-    document.getElementById("formtitle").value=NoteFound[0].title
-    document.getElementById("formimportance").value=NoteFound[0].importance.length
-    document.getElementById("formduedate").value=NoteFound[0].due
-    if(NoteFound[0].finished){
-        document.getElementById("formfinished").checked=true
-    }else{
-        document.getElementById("formfinished").checked=false;
-    }
-    document.getElementById("formdescription").value=NoteFound[0].description
 
 }
 function notesEventHandlers(){
     const edits=document.querySelectorAll(".edit")
     edits.forEach(editbut => {
-        editbut.addEventListener("click",ToggleEditMode)
+        editbut.addEventListener("click",toggleEditMode)
         editbut.addEventListener("click",toggleFormMode)
         editbut.addEventListener("click",fillEditForm)
     });
     const checkboxes=document.querySelectorAll(".checkbox")
     for (let i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].addEventListener("click",ToggleOpenClosed)
-    
+        checkboxes[i].addEventListener("click",toggleOpenClosed)
     }
 }
-const HBscript='{{#each note}}<div class="todoitem"><div class="todocontainer" ><p class="duedate">{{due}}</p><div>{{#if finished}}<input class="checkbox" name="checkbox" type="checkbox" checked><span class="checkboxlabel">Closed</span>{{else}}<input class="checkbox" name="checkbox" type="checkbox"><span class="checkboxlabel">Open</span>{{/if}}</div></div><div class="todocontainer" ><p>{{title}}</p><p>{{description}}</p></div><div class="flexright" ><div class="flexright">{{#each importance}}<div class="arrow"></div>{{/each}}</div><div class="button edit" data-id="{{_id}}">Edit</div></div></div>{{/each}}'
+const HBscript='{{#each note}}<div class="todoitem{{#if ../darkmode}} darkmode{{/if}}"><div class="todocontainer" ><p class="duedate">{{due}}</p><div>{{#if finished}}<input class="checkbox" name="checkbox" data-id="{{_id}}" type="checkbox" checked><span class="checkboxlabel">Closed</span>{{else}}<input class="checkbox" name="checkbox" data-id="{{_id}}" type="checkbox"><span class="checkboxlabel">Open</span>{{/if}}</div></div><div class="todocontainer" ><p>{{title}}</p><p>{{description}}</p></div><div class="flexright" ><div class="flexright">{{#each importance}}<div class="arrow{{#unless ../../darkmode}} darkmode{{/unless}}"></div>{{/each}}</div><div class="button edit" data-id="{{_id}}">Edit</div></div></div>{{/each}}'
 /* global Handlebars */
 const todoTemplateCompiled=Handlebars.compile(HBscript);
-
-export function showNotes(notelist) {
+export async function showNotes(notelistfunc,param1) {
+    const notelist=await notelistfunc(param1)
     document.getElementById("todolist").innerHTML = todoTemplateCompiled(
         {note: notelist,darkmode},
         {allowProtoPropertiesByDefault: true}
     )
-    if (darkmode) {
-        arrowDarkMode()
-    }
     notesEventHandlers()
-    ChangeDate()
-}
-async function sortitby(sortHowDic){
-    showNotes(await NoteService.SortedNote(sortHowDic))
-}
-function grabFormData(){
-    const formtitle=document.getElementById("formtitle")
-    const formimportance=document.getElementById("formimportance")
-    const formduedate=document.getElementById("formduedate")
-    const formfinished=document.getElementById("formfinished").checked
-    const formdescription=document.getElementById("formdescription").value
-    const formid=document.getElementById("id").value
-    const formcreated=new Date().toISOString().slice(0, 10)
-    const importancelist=[]
-    for (let i = 0; i < formimportance.value; i++) {
-        importancelist.push(1)   
+    changeDate()
+    if (filter) {
+        filterCompleted()
     }
-    const thebody={title:formtitle.value,due:formduedate.value,created:formcreated,importance:importancelist,description:formdescription,finished:formfinished,importanceInt:formimportance.value,id:formid}
-    return(thebody) 
 }
-async function CreateNewTodo(){
-    const thebody=grabFormData()
-    document.getElementById("todoform").reset();
-    customAlert("passed","Todo added Succesfully")
-    showNotes(await NoteService.createNewNote(thebody))
+function sortOnClick(){
+    const body={"sortway":this.dataset.sortway,"sorthighlow":this.dataset.highlow}
+    highLightButton(this.dataset.sortway)
+    showNotes(NoteService.sortedNote,body)
 }
-function ValidateForm(){
-    const formtitle=document.getElementById("formtitle")
-    const formimportance=document.getElementById("formimportance")
-    const formduedate=document.getElementById("formduedate")
-    let formcheck=true
-    const checklist=[formtitle,formimportance,formduedate]
-    checklist.forEach(element => {
-        if (!element.validity.valid) {
-            formcheck=false
-            element.reportValidity();   
-        }
-    });
-    if (formcheck===true) {
-        return true
-    }
-    return false
-}
-async function saveEdit(){
-    const thebody=grabFormData()
-    showNotes(await NoteService.editNote(thebody))
-}
-async function DeleteNote(){
-    const formid=document.getElementById("id").value
-    const thebody={id:formid}
-    showNotes(await NoteService.deleteNote(thebody))
-    ToggleEditMode()
-    document.getElementById("todoform").reset();
+function sortOnChange(){
+    const body={"sortway":this.dataset.sortway,"sorthighlow":this.value}
+    highLightButton(this.dataset.sortway)
+    showNotes(NoteService.sortedNote,body)
+
 }
 
-export class NoteController {
+async function setDarkMode(){
+    darkmode=!darkmode;
+    lightDarkMode()
+    await NoteService.darkMode({"darkmode":darkmode})
+}
+
+class NoteController {
     constructor() {
         this.tognew=document.querySelectorAll(".tognew")
         this.loggedin=document.getElementById("loggedin")
-        this.sorttitle=document.getElementById("sorttitle")
-        this.sortdue=document.getElementById("sortdue")
-        this.sortcreated=document.getElementById("sortcreated")
-        this.sortimportance=document.getElementById("sortimportance")
+        this.sortimportance=document.getElementById("sortimportanceInt")
+        this.sortButtons=document.querySelectorAll(".sorter")
+        this.importancedrop=document.getElementById("sortimportanceInt")
     }
 
     initEventHandlers() {
-        this.sorttitle.addEventListener("click",()=>{
-            sortitby({"title":1})
+        this.sortButtons.forEach(element => {
+            element.addEventListener("click",sortOnClick)
+        });
+        this.importancedrop.addEventListener("change",sortOnChange)
+        document.getElementById("sortcompleted").addEventListener("click",()=>{
+            filter=!filter
+            NoteService.filterCom({"filter":filter})
+            document.getElementById("sortcompleted").classList.toggle("filtering")
+            filterCompleted()
         })
-        this.sortdue.addEventListener("click",()=>{
-            sortitby({"due":1})
-        })
-        this.sortcreated.addEventListener("click",()=>{
-            sortitby({"created":1})
-        })
-        this.sortimportance.addEventListener("change",()=>{
-            const SortImportance=document.getElementById("sortimportance")
-            const HighLow=Number(SortImportance.value)
-            sortitby({"importanceInt":HighLow})
-        })
-        document.getElementById("sortcompleted").addEventListener("click",FilterCompleted)
-        
+
         this.tognew.forEach(element => {
             element.addEventListener("click",toggleFormMode)
         });        
         
         document.getElementById("saveedit").addEventListener("click",(event)=>{
-            if (ValidateForm()) {
-                saveEdit()
-                ToggleEditMode()
+            if (validateForm()) {
+                showNotes(saveEdit)
+                toggleEditMode()
                 toggleFormMode()
             }
             event.preventDefault()
         })
-        document.getElementById("deleteedit").addEventListener("click",DeleteNote)
+        document.getElementById("deleteedit").addEventListener("click",(event)=>{
+            showNotes(deleteNote)
+            toggleEditMode()
+            document.getElementById("todoform").reset();
+            event.preventDefault()
+        })
         document.getElementById("create").addEventListener("click",(event)=>{
-            if (ValidateForm()) {
-                CreateNewTodo()
+            if (validateForm()) {
+                showNotes(createNewTodo)
             }
             event.preventDefault()
         });
         document.getElementById("createoverview").addEventListener("click",(event)=>{
-            CreateNewTodo()
+            showNotes(createNewTodo)
             event.preventDefault()
         })
 
-        document.getElementById("togstyle").addEventListener("click",()=>{
-            lightDarkMode()
-            arrowDarkMode()
-            darkmode=!darkmode;
-        })
+        document.getElementById("togstyle").addEventListener("click",setDarkMode)
     }
 
-    async initialize () {
-        if (this.loggedin.innerHTML==="true") {
-            // showNotes(await noteService.loadNoteList())
-            showNotes(await NoteService.loadNoteList())
-            
-            this.initEventHandlers();
-        }
-    }
 }
 
-export const noteController = new NoteController();
-noteController.initialize()
+const noteController = new NoteController();
+
+export async function initialize () {
+    if (document.getElementById("loggedin").innerHTML==="true") {
+        const notesAndDark=await NoteService.loadNoteList()
+        if (notesAndDark.darkmode!==darkmode) {
+            darkmode=!darkmode
+            lightDarkMode()
+        }
+        if (notesAndDark.filter!==filter) {
+            filter=!filter
+            document.getElementById("sortcompleted").classList.toggle("filtering")
+        }
+        highLightButton(notesAndDark.sortid)
+        noteController.initEventHandlers();
+
+        return notesAndDark.notes
+        
+    }
+    return false
+}
+showNotes(initialize)
